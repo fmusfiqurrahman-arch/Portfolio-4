@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2310b981'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Georgia,serif' font-weight='900' font-size='20' fill='white'>J</text></svg>" />
+  <link rel="icon" href="jisan-logo.png" type="image/png" />
   <style>
     :root {
       --bg:#060a10; --bg2:#0a0f1a; --bg3:#0f1520;
@@ -51,7 +51,17 @@
 
     /* ── Nav ── */
     nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--nav-bg);backdrop-filter:blur(24px);border-bottom:1px solid var(--card-border);padding:0 2rem;height:68px;display:flex;align-items:center;justify-content:space-between;transition:var(--t);}
-    a.nav-logo{font-family:'Outfit',sans-serif;font-weight:900;font-size:1.1rem;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;cursor:pointer;}
+    a.nav-logo{cursor:pointer;display:inline-flex;align-items:center;flex-shrink:0;padding:2px 0;background:none;transition:var(--t);}
+    a.nav-logo img{height:36px;width:auto;display:block;transition:filter 0.3s ease;}
+    [data-theme="dark"] a.nav-logo img{filter:brightness(0) invert(1);}
+    [data-theme="dark"] a.nav-logo:hover img{filter:brightness(0) invert(1) drop-shadow(0 0 6px rgba(52,211,153,0.65));}
+    [data-theme="light"] a.nav-logo:hover img{filter:drop-shadow(0 0 4px rgba(26,53,116,0.3));}
+    /* ── Light mode button overrides (dark mode unchanged) ── */
+    [data-theme="light"] .btn-primary,[data-theme="light"] .nav-cta,[data-theme="light"] .theme-btn,[data-theme="light"] .form-submit{background:linear-gradient(135deg,#059669 0%,#0284c7 100%);color:#ffffff;}
+    [data-theme="light"] .btn-primary:hover,[data-theme="light"] .nav-cta:hover,[data-theme="light"] .theme-btn:hover,[data-theme="light"] .form-submit:hover{opacity:0.88;box-shadow:0 8px 24px rgba(5,150,105,0.3);}
+    /* ── Light mode: remove vignette on profile pic ── */
+    [data-theme="light"] .hero-avatar::after{display:none;}
+    [data-theme="light"] .about-avatar::after{display:none;}
     .nav-links{display:flex;gap:1.75rem;list-style:none;align-items:center;}
     .nav-links a{font-size:0.86rem;font-weight:500;color:var(--text-muted);letter-spacing:0.02em;transition:var(--t);position:relative;}
     .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:100%;height:1.5px;background:var(--grad);transition:right 0.3s ease;}
@@ -88,7 +98,11 @@
     .hero-img-wrap{position:relative;width:340px;height:420px;margin:0 auto;}
     .hero-img-bg{position:absolute;inset:-20px;background:var(--grad);border-radius:40% 60% 60% 40%/40% 40% 60% 60%;opacity:0.1;animation:morphBlob 9s ease-in-out infinite alternate;}
     @keyframes morphBlob{from{border-radius:40% 60% 60% 40%/40% 40% 60% 60%}to{border-radius:60% 40% 40% 60%/60% 60% 40% 40%}}
-    .hero-avatar{width:100%;height:100%;border-radius:28px;background:linear-gradient(145deg,var(--bg3) 0%,var(--bg2) 100%);border:1px solid var(--card-border);display:flex;align-items:center;justify-content:center;font-size:7.5rem;position:relative;z-index:1;overflow:hidden;box-shadow:var(--shadow);}
+    .hero-avatar{width:100%;height:100%;border-radius:28px;background:linear-gradient(145deg,var(--bg3) 0%,var(--bg2) 100%);border:1px solid var(--card-border);display:flex;align-items:center;justify-content:center;position:relative;z-index:1;overflow:hidden;box-shadow:var(--shadow);}
+    .hero-avatar img{width:100%;height:100%;object-fit:cover;object-position:center top;}
+    .hero-avatar::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center top,transparent 40%,var(--bg3) 100%),linear-gradient(to bottom,transparent 55%,var(--bg2) 100%);z-index:2;pointer-events:none;border-radius:28px;}
+    .hero-avatar.avatar-fallback{background:linear-gradient(145deg,#0d1a2e,#0a2d1f);display:flex;align-items:center;justify-content:center;}
+    .hero-avatar.avatar-fallback::after{content:'SKJ';font-family:'Outfit',sans-serif;font-size:4.5rem;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background:var(--grad);position:static;inset:unset;}
     .hero-badge{position:absolute;background:var(--card);backdrop-filter:blur(20px);border:1px solid var(--card-border);border-radius:12px;padding:0.55rem 0.95rem;font-size:0.73rem;font-weight:700;z-index:2;box-shadow:var(--shadow);}
     .badge-cgpa{bottom:28px;left:-32px;color:var(--emerald);}
     .badge-ibm{top:28px;right:-32px;color:var(--amber);}
@@ -116,11 +130,16 @@
     .about-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:4rem;align-items:start;}
     .about-sidebar{position:sticky;top:88px;}
     .about-img-card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:1.75rem;backdrop-filter:blur(20px);}
-    .about-avatar{width:100%;aspect-ratio:1;border-radius:14px;background:linear-gradient(135deg,var(--bg3),var(--bg));display:flex;align-items:center;justify-content:center;font-size:4.5rem;margin-bottom:1.4rem;overflow:hidden;border:1px solid var(--card-border);}
+    .about-avatar{width:100%;aspect-ratio:1;border-radius:14px;margin-bottom:1.4rem;overflow:hidden;border:1px solid var(--card-border);position:relative;}
+    .about-avatar img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;}
+    .about-avatar::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 60%,var(--card) 100%);pointer-events:none;}
+    .about-avatar.avatar-fallback{background:linear-gradient(145deg,#0d1a2e,#0a2d1f);display:flex;align-items:center;justify-content:center;}
+    .about-avatar.avatar-fallback::after{content:'SKJ';font-family:'Outfit',sans-serif;font-size:3rem;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
     .about-name{font-family:'Outfit',sans-serif;font-size:1.15rem;font-weight:800;margin-bottom:0.2rem;}
     .about-role{color:var(--emerald);font-size:0.83rem;font-weight:600;margin-bottom:1.2rem;}
     .about-info-row{display:flex;align-items:center;gap:0.75rem;font-size:0.8rem;color:var(--text-muted);padding:0.45rem 0;border-bottom:1px solid var(--card-border);}
     .about-info-row:last-child{border-bottom:none;}
+    .info-icon{width:16px;height:16px;flex-shrink:0;color:var(--emerald);opacity:0.8;}
     .about-text{color:var(--text-muted);margin-bottom:1.4rem;font-size:1rem;}
     .about-highlight{background:var(--card);border:1px solid var(--card-border);border-left:3px solid var(--emerald);border-radius:0 var(--radius) var(--radius) 0;padding:1.15rem 1.4rem;margin-bottom:2rem;font-style:italic;color:var(--text-muted);backdrop-filter:blur(20px);}
     .edu-timeline{display:flex;flex-direction:column;gap:1rem;}
@@ -137,7 +156,8 @@
     .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.4rem;}
     .skill-category{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:1.65rem;backdrop-filter:blur(20px);transition:var(--t);}
     .skill-category:hover{border-color:rgba(52,211,153,0.3);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,0.3);}
-    .skill-cat-icon{font-size:1.7rem;margin-bottom:0.7rem;width:50px;height:50px;background:rgba(52,211,153,0.09);border-radius:12px;display:flex;align-items:center;justify-content:center;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);}
+    .skill-cat-icon{margin-bottom:0.7rem;width:50px;height:50px;background:rgba(52,211,153,0.09);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--emerald);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);}
+    .skill-cat-icon svg{width:24px;height:24px;}
     .skill-category:hover .skill-cat-icon{transform:scale(1.25) rotate(-10deg);}
     .skill-cat-title{font-family:'Outfit',sans-serif;font-weight:800;font-size:0.92rem;margin-bottom:0.9rem;}
     .skill-tags{display:flex;flex-wrap:wrap;gap:0.45rem;}
@@ -212,7 +232,8 @@
     .timeline{display:flex;flex-direction:column;position:relative;}
     .timeline::before{content:'';position:absolute;left:18px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--emerald),transparent);}
     .timeline-item{display:flex;gap:1.15rem;padding-bottom:1.65rem;}
-    .timeline-dot{width:36px;height:36px;flex-shrink:0;border-radius:50%;background:var(--card);border:2px solid var(--emerald);display:flex;align-items:center;justify-content:center;font-size:0.95rem;position:relative;z-index:1;}
+    .timeline-dot{width:36px;height:36px;flex-shrink:0;border-radius:50%;background:var(--card);border:2px solid var(--emerald);display:flex;align-items:center;justify-content:center;position:relative;z-index:1;color:var(--emerald);}
+    .timeline-dot svg{width:16px;height:16px;}
     .timeline-content{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:1.05rem 1.2rem;flex:1;backdrop-filter:blur(20px);transition:var(--t);}
     .timeline-content:hover{border-color:rgba(52,211,153,0.3);}
     .timeline-title{font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:800;margin-bottom:0.14rem;}
@@ -229,13 +250,15 @@
     .pub-cards{display:flex;flex-direction:column;gap:0.75rem;}
     .pub-card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:1rem 1.25rem;backdrop-filter:blur(20px);border-left:3px solid var(--rose);transition:var(--t);}
     .pub-card:hover{transform:translateX(4px);}
-    .pub-tag{display:inline-flex;align-items:center;gap:0.28rem;background:rgba(251,113,133,0.09);color:var(--rose);font-size:0.68rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:0.18rem 0.55rem;border-radius:50px;margin-bottom:0.5rem;}
+    .pub-tag{display:inline-flex;align-items:center;background:rgba(251,113,133,0.09);color:var(--rose);font-size:0.68rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:0.18rem 0.55rem;border-radius:50px;margin-bottom:0.5rem;}
     .pub-title{font-family:'Outfit',sans-serif;font-weight:800;font-size:0.86rem;margin-bottom:0.25rem;}
     .pub-desc{font-size:0.78rem;color:var(--text-muted);}
     .pub-status{margin-top:0.4rem;font-size:0.72rem;font-weight:700;color:var(--amber);}
-    .awards-grid{display:flex;flex-wrap:wrap;gap:0.65rem;}
-    .award-chip{background:var(--card);border:1px solid var(--card-border);border-radius:50px;padding:0.42rem 0.85rem;font-size:0.77rem;font-weight:600;display:flex;align-items:center;gap:0.4rem;transition:var(--t);}
+    .awards-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;}
+    .award-chip{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:0.6rem 0.85rem;font-size:0.77rem;font-weight:600;display:flex;align-items:center;gap:0.55rem;transition:var(--t);}
+    .award-chip::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--emerald);flex-shrink:0;}
     .award-chip:hover{border-color:var(--amber);color:var(--amber);}
+    .award-chip:hover::before{background:var(--amber);}
 
     /* ── Contact ── */
     .contact-header{text-align:center;margin-bottom:2.5rem;}
@@ -247,7 +270,8 @@
     .contact-links{display:flex;flex-direction:column;gap:0.75rem;}
     .contact-link{display:flex;align-items:center;gap:0.95rem;background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:0.9rem 1.1rem;backdrop-filter:blur(20px);transition:var(--t);}
     .contact-link:hover{border-color:var(--emerald);transform:translateX(4px);}
-    .contact-link-icon{width:40px;height:40px;flex-shrink:0;background:rgba(52,211,153,0.09);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.05rem;}
+    .contact-link-icon{width:40px;height:40px;flex-shrink:0;background:rgba(52,211,153,0.09);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--emerald);}
+    .contact-link-icon svg{width:20px;height:20px;}
     .contact-link-title{font-weight:700;font-size:0.86rem;}
     .contact-link-val{font-size:0.78rem;color:var(--text-muted);}
     .contact-form{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:1.9rem;backdrop-filter:blur(20px);}
@@ -301,7 +325,8 @@
 
 <!-- Nav -->
 <nav id="navbar">
-  <a href="#home" class="nav-logo">Jisa</a>
+  <a href="#home" class="nav-logo"><img src="jisan_portfolio.png" alt="Jisan" /></a>
+
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#skills">Skills</a></li>
@@ -353,7 +378,7 @@
     <div class="hero-right">
       <div class="hero-img-wrap">
         <div class="hero-img-bg"></div>
-        <div class="hero-avatar">🧑‍💻</div>
+        <div class="hero-avatar" id="heroAvatarWrap"><img src="WhatsApp Image 2026-05-14 at 01.28.23.jpeg" alt="Sameeul Khondoker Jisan" onerror="this.style.display='none';document.getElementById('heroAvatarWrap').classList.add('avatar-fallback')" /></div>
         <div class="hero-badge badge-cgpa"><div class="bv">3.55</div><div class="badge-label">CGPA · BSc SE, DIU</div></div>
         <div class="hero-badge badge-ibm"><div class="bv">IBM</div><div class="badge-label">AI + Data Science Cert.</div></div>
       </div>
@@ -369,15 +394,14 @@
       <div class="about-grid">
         <div class="about-sidebar fade-in-up">
           <div class="about-img-card">
-            <div class="about-avatar">🧑‍💻</div>
+            <div class="about-avatar" id="aboutAvatarWrap"><img src="WhatsApp Image 2026-05-14 at 01.28.23.jpeg" alt="Sameeul Khondoker Jisan" onerror="this.style.display='none';document.getElementById('aboutAvatarWrap').classList.add('avatar-fallback')" /></div>
             <div class="about-name">Sameeul Khondoker Jisan</div>
             <div class="about-role">Data Scientist · AI Engineer</div>
-            <div class="about-info-row"><span>📍</span><span>Dhaka, Bangladesh</span></div>
-            <div class="about-info-row"><span>🎓</span><span>BSc Software Eng., DIU (2026)</span></div>
-            <div class="about-info-row"><span>💼</span><span>Data Science Intern @ SaiKet Systems</span></div>
-            <div class="about-info-row"><span>📝</span><span>IELTS 7.0 Overall Band</span></div>
-            <div class="about-info-row"><span>🌐</span><span>www.sameeul.combd</span></div>
-            <div class="about-info-row"><span>📧</span><span>mrkhondokar.prof@gmail.com</span></div>
+            <div class="about-info-row"><svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Dhaka, Bangladesh</span></div>
+            <div class="about-info-row"><svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><span>BSc Software Eng., DIU (2026)</span></div>
+            <div class="about-info-row"><svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg><span>Data Science Intern @ SaiKet Systems</span></div>
+            <div class="about-info-row"><svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span>IELTS 7.0 Overall Band</span></div>
+            <div class="about-info-row"><svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg><span>mrkhondokar.prof@gmail.com</span></div>
           </div>
         </div>
         <div class="about-content fade-in-up">
@@ -419,7 +443,7 @@
       <p class="section-sub">A comprehensive stack spanning data science, AI engineering, backend development, and intelligent systems.</p>
       <div class="skills-grid">
         <div class="skill-category fade-in-up">
-          <div class="skill-cat-icon">🐍</div>
+          <div class="skill-cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
           <div class="skill-cat-title">Programming Languages</div>
           <div class="skill-tags">
             <span class="skill-tag">Python</span><span class="skill-tag">R</span><span class="skill-tag">SQL</span>
@@ -428,7 +452,7 @@
           </div>
         </div>
         <div class="skill-category fade-in-up">
-          <div class="skill-cat-icon">🤖</div>
+          <div class="skill-cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2M9 2v2M2 15h2M2 9h2M15 20v2M9 20v2M20 15h2M20 9h2"/></svg></div>
           <div class="skill-cat-title">Machine Learning & AI</div>
           <div class="skill-tags">
             <span class="skill-tag">TensorFlow</span><span class="skill-tag">PyTorch</span>
@@ -438,7 +462,7 @@
           </div>
         </div>
         <div class="skill-category fade-in-up">
-          <div class="skill-cat-icon">📊</div>
+          <div class="skill-cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></div>
           <div class="skill-cat-title">Data Science & Analytics</div>
           <div class="skill-tags">
             <span class="skill-tag">Pandas</span><span class="skill-tag">NumPy</span>
@@ -448,7 +472,7 @@
           </div>
         </div>
         <div class="skill-category fade-in-up">
-          <div class="skill-cat-icon">📈</div>
+          <div class="skill-cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
           <div class="skill-cat-title">Data Visualization</div>
           <div class="skill-tags">
             <span class="skill-tag">Matplotlib</span><span class="skill-tag">Seaborn</span>
@@ -457,7 +481,7 @@
           </div>
         </div>
         <div class="skill-category fade-in-up">
-          <div class="skill-cat-icon">🗄️</div>
+          <div class="skill-cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
           <div class="skill-cat-title">Databases & Backend</div>
           <div class="skill-tags">
             <span class="skill-tag">MySQL</span><span class="skill-tag">PostgreSQL</span>
@@ -467,7 +491,7 @@
           </div>
         </div>
         <div class="skill-category fade-in-up">
-          <div class="skill-cat-icon">🛠️</div>
+          <div class="skill-cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
           <div class="skill-cat-title">Tools & Platforms</div>
           <div class="skill-tags">
             <span class="skill-tag">Git / GitHub</span><span class="skill-tag">Jupyter Notebook</span>
@@ -477,7 +501,7 @@
           </div>
         </div>
         <div class="skill-category fade-in-up">
-          <div class="skill-cat-icon">🧠</div>
+          <div class="skill-cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
           <div class="skill-cat-title">Soft Skills</div>
           <div class="skill-tags">
             <span class="skill-tag soft">Problem Solving</span><span class="skill-tag soft">Analytical Thinking</span>
@@ -487,7 +511,7 @@
           </div>
         </div>
         <div class="skill-category fade-in-up">
-          <div class="skill-cat-icon">🎬</div>
+          <div class="skill-cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
           <div class="skill-cat-title">Design & Media</div>
           <div class="skill-tags">
             <span class="skill-tag">Canva</span><span class="skill-tag">Video Editing</span>
@@ -528,11 +552,11 @@
           </div>
           <div class="project-body">
             <div class="project-title">Finzy — AI-Powered Finance System</div>
-            <div class="project-problem">🔍 Problem: Manual expense tracking is tedious and lacks intelligent spending insights.</div>
+            <div class="project-problem">Problem: Manual expense tracking is tedious and lacks intelligent spending insights.</div>
             <div class="project-desc">Full-stack AI-powered personal finance system with smart receipt scanning via Google Gemini AI, automated expense categorization, budget tracking, analytics dashboards, and real-time notifications.</div>
-            <div class="project-outcome">✨ End-to-end intelligent financial management with Gemini AI</div>
+            <div class="project-outcome">End-to-end intelligent financial management with Gemini AI</div>
             <div class="project-tags"><span class="project-tag">Next.js</span><span class="project-tag">Prisma</span><span class="project-tag">PostgreSQL</span><span class="project-tag">Supabase</span><span class="project-tag">Google Gemini AI</span></div>
-            <div class="project-footer"><a href="https://github.com/jisan23051365" target="_blank" class="project-link">GitHub →</a><div class="feat-tag">⭐ Featured</div></div>
+            <div class="project-footer"><a href="https://github.com/jisan23051365" target="_blank" rel="noopener noreferrer" class="project-link">GitHub →</a><div class="feat-tag">Featured</div></div>
           </div>
         </div>
 
@@ -556,11 +580,11 @@
           </div>
           <div class="project-body">
             <div class="project-title">LLM-Powered Code Review Assistant</div>
-            <div class="project-problem">🔍 Problem: Manual code reviews are slow, inconsistent, and miss subtle anti-patterns.</div>
+            <div class="project-problem">Problem: Manual code reviews are slow, inconsistent, and miss subtle anti-patterns.</div>
             <div class="project-desc">ML-powered code review assistant using CodeLlama to analyze pull request diffs, detect bug patterns, identify code anti-patterns, and automate intelligent first-pass software quality reviews.</div>
-            <div class="project-outcome">✨ High detection accuracy with low false-positive rates</div>
+            <div class="project-outcome">High detection accuracy with low false-positive rates</div>
             <div class="project-tags"><span class="project-tag">CodeLlama</span><span class="project-tag">Python</span><span class="project-tag">LLM</span><span class="project-tag">ML</span></div>
-            <div class="project-footer"><a href="https://github.com/jisan23051365" target="_blank" class="project-link">GitHub →</a><div class="feat-tag">⭐ Featured</div></div>
+            <div class="project-footer"><a href="https://github.com/jisan23051365" target="_blank" rel="noopener noreferrer" class="project-link">GitHub →</a><div class="feat-tag">Featured</div></div>
           </div>
         </div>
 
@@ -584,11 +608,11 @@
           </div>
           <div class="project-body">
             <div class="project-title">AI Carbon Footprint Prediction</div>
-            <div class="project-problem">🔍 Problem: Individual carbon emissions are poorly quantified due to behavioral complexity.</div>
+            <div class="project-problem">Problem: Individual carbon emissions are poorly quantified due to behavioral complexity.</div>
             <div class="project-desc">Developed and compared Random Forest, XGBoost, and MLP Regressor models to predict individual carbon footprints from behavioral and energy data. Used SHAP for explainable AI analysis of key factors.</div>
-            <div class="project-outcome">✨ Identified key behavioral factors driving carbon emissions via SHAP</div>
+            <div class="project-outcome">Identified key behavioral factors driving carbon emissions via SHAP</div>
             <div class="project-tags"><span class="project-tag">Random Forest</span><span class="project-tag">XGBoost</span><span class="project-tag">MLP Regressor</span><span class="project-tag">SHAP</span><span class="project-tag">Feature Engineering</span></div>
-            <div class="project-footer"><a href="https://github.com/jisan23051365" target="_blank" class="project-link">GitHub →</a><div class="feat-tag">📄 Research</div></div>
+            <div class="project-footer"><a href="https://github.com/jisan23051365" target="_blank" rel="noopener noreferrer" class="project-link">GitHub →</a><div class="feat-tag">Research</div></div>
           </div>
         </div>
 
@@ -614,11 +638,11 @@
           </div>
           <div class="project-body">
             <div class="project-title">Core Banking & Digital Wallet System</div>
-            <div class="project-problem">🔍 Problem: Legacy banking systems lack modern digital wallet and transaction tracking.</div>
+            <div class="project-problem">Problem: Legacy banking systems lack modern digital wallet and transaction tracking.</div>
             <div class="project-desc">Enterprise-level fintech backend with customer/account management, digital wallet integration, secure transaction processing, financial ledger tracking, and layered enterprise architecture.</div>
-            <div class="project-outcome">✨ Production-grade fintech backend following modern banking standards</div>
+            <div class="project-outcome">Production-grade fintech backend following modern banking standards</div>
             <div class="project-tags"><span class="project-tag">Spring Boot</span><span class="project-tag">MySQL</span><span class="project-tag">RESTful APIs</span><span class="project-tag">Hibernate</span></div>
-            <div class="project-footer"><a href="https://github.com/jisan23051365" target="_blank" class="project-link">GitHub →</a></div>
+            <div class="project-footer"><a href="https://github.com/jisan23051365" target="_blank" rel="noopener noreferrer" class="project-link">GitHub →</a></div>
           </div>
         </div>
 
@@ -643,11 +667,11 @@
           </div>
           <div class="project-body">
             <div class="project-title">ML Performance on Incomplete Data</div>
-            <div class="project-problem">🔍 Problem: Real-world datasets are often incomplete — how badly does this hurt ML models?</div>
+            <div class="project-problem">Problem: Real-world datasets are often incomplete — how badly does this hurt ML models?</div>
             <div class="project-desc">Research study evaluating Logistic Regression, Decision Trees, and KNN under varying levels of data incompleteness to quantify prediction degradation and identify data quality risk thresholds.</div>
-            <div class="project-outcome">✨ Quantified prediction degradation curves for 3 ML algorithms</div>
+            <div class="project-outcome">Quantified prediction degradation curves for 3 ML algorithms</div>
             <div class="project-tags"><span class="project-tag">Logistic Regression</span><span class="project-tag">Decision Tree</span><span class="project-tag">KNN</span><span class="project-tag">Python</span></div>
-            <div class="project-footer"><a href="https://github.com/jisan23051365" target="_blank" class="project-link">GitHub →</a><div class="feat-tag">📄 Research</div></div>
+            <div class="project-footer"><a href="https://github.com/jisan23051365" target="_blank" rel="noopener noreferrer" class="project-link">GitHub →</a><div class="feat-tag">Research</div></div>
           </div>
         </div>
 
@@ -676,11 +700,11 @@
           </div>
           <div class="project-body">
             <div class="project-title">AI Public Transport Delay Prediction</div>
-            <div class="project-problem">🔍 Problem: Unpredictable transit delays disrupt urban mobility and commuter planning.</div>
+            <div class="project-problem">Problem: Unpredictable transit delays disrupt urban mobility and commuter planning.</div>
             <div class="project-desc">ML-based transportation analytics system predicting public transport delays using weather conditions, traffic patterns, and event-based data to improve transit forecasting and urban mobility analysis.</div>
-            <div class="project-outcome">✨ Improved transit forecasting accuracy using multi-factor modeling</div>
+            <div class="project-outcome">Improved transit forecasting accuracy using multi-factor modeling</div>
             <div class="project-tags"><span class="project-tag">Python</span><span class="project-tag">Scikit-learn</span><span class="project-tag">Pandas</span><span class="project-tag">Feature Eng.</span></div>
-            <div class="project-footer"><a href="https://github.com/jisan23051365" target="_blank" class="project-link">GitHub →</a></div>
+            <div class="project-footer"><a href="https://github.com/jisan23051365" target="_blank" rel="noopener noreferrer" class="project-link">GitHub →</a></div>
           </div>
         </div>
 
@@ -864,10 +888,10 @@
       <h2 class="section-title">Experience &<br><span class="line-accent">Learning Path</span></h2>
       <div class="experience-grid">
         <div class="fade-in-up">
-          <div class="exp-col-title">💼 Work Experience</div>
+          <div class="exp-col-title">Work Experience</div>
           <div class="timeline">
             <div class="timeline-item">
-              <div class="timeline-dot">📊</div>
+              <div class="timeline-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></div>
               <div class="timeline-content">
                 <div class="timeline-title">Data Science Intern</div>
                 <div class="timeline-org">SaiKet Systems</div>
@@ -876,7 +900,7 @@
               </div>
             </div>
             <div class="timeline-item">
-              <div class="timeline-dot">🎬</div>
+              <div class="timeline-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
               <div class="timeline-content">
                 <div class="timeline-title">Video Editor & Content Creator</div>
                 <div class="timeline-org">GoEdu</div>
@@ -885,7 +909,7 @@
               </div>
             </div>
             <div class="timeline-item">
-              <div class="timeline-dot">🎓</div>
+              <div class="timeline-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
               <div class="timeline-content">
                 <div class="timeline-title">Volunteer</div>
                 <div class="timeline-org">Career Development Center (CDC-DIU)</div>
@@ -894,7 +918,7 @@
               </div>
             </div>
             <div class="timeline-item">
-              <div class="timeline-dot">🖥️</div>
+              <div class="timeline-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
               <div class="timeline-content">
                 <div class="timeline-title">Data Entry Operator</div>
                 <div class="timeline-org">Golden Harvest InfoTech Limited</div>
@@ -907,16 +931,16 @@
 
         <div class="exp-right fade-in-up">
           <div class="exp-subsection">
-            <div class="exp-col-title">📜 Research Papers</div>
+            <div class="exp-col-title">Research Papers</div>
             <div class="pub-cards">
               <div class="pub-card">
-                <div class="pub-tag">📄 Research Paper</div>
+                <div class="pub-tag">Research Paper</div>
                 <div class="pub-title">AI-Based Predictive Modeling of Individual Carbon Footprints</div>
                 <div class="pub-desc">RF, XGBoost, MLP Regressor · SHAP-based explainable AI · Behavioral & energy consumption datasets</div>
                 <div class="pub-status">Under Review — IJCA 2025</div>
               </div>
               <div class="pub-card">
-                <div class="pub-tag">📄 Research Paper</div>
+                <div class="pub-tag">Research Paper</div>
                 <div class="pub-title">When ML Models Should Not Predict: Effect of Incomplete Data on Performance</div>
                 <div class="pub-desc">Logistic Regression, Decision Tree, KNN · Prediction degradation analysis · Data quality risk study</div>
                 <div class="pub-status">Under Review — IJCA 2025</div>
@@ -925,7 +949,7 @@
           </div>
 
           <div class="exp-subsection">
-            <div class="exp-col-title">🏅 Certifications</div>
+            <div class="exp-col-title">Certifications</div>
             <div class="cert-grid">
               <div class="cert-card">
                 <div class="cert-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div>
@@ -952,14 +976,14 @@
           </div>
 
           <div class="exp-subsection">
-            <div class="exp-col-title">🏆 Awards & Activities</div>
+            <div class="exp-col-title">Awards & Activities</div>
             <div class="awards-grid">
-              <div class="award-chip">🌟 GoEdu Top Campus Ambassador</div>
-              <div class="award-chip">🤖 National Robotics Championship 2025</div>
-              <div class="award-chip">💼 DIU Job Utsob 2024 & 2025 Volunteer</div>
-              <div class="award-chip">💻 DIU CSE Fest 2025 Project Show</div>
-              <div class="award-chip">🏫 CDC-DIU Campus Ambassador</div>
-              <div class="award-chip">⌨️ DIU SEC Code Trap Organizer</div>
+              <div class="award-chip">GoEdu Top Campus Ambassador</div>
+              <div class="award-chip">National Robotics Championship 2025</div>
+              <div class="award-chip">DIU Job Utsob 2024 & 2025 Volunteer</div>
+              <div class="award-chip">DIU CSE Fest 2025 Project Show</div>
+              <div class="award-chip">CDC-DIU Campus Ambassador</div>
+              <div class="award-chip">DIU SEC Code Trap Organizer</div>
             </div>
           </div>
         </div>
@@ -984,21 +1008,29 @@
               <div class="contact-link-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg></div>
               <div><div class="contact-link-title">Email</div><div class="contact-link-val">mrkhondokar.prof@gmail.com</div></div>
             </a>
-            <a href="https://linkedin.com/in/mrkhondokar504" target="_blank" class="contact-link">
+            <a href="https://linkedin.com/in/mrkhondokar504" target="_blank" rel="noopener noreferrer" class="contact-link">
               <div class="contact-link-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 015 0V17M12 10v7"/></svg></div>
               <div><div class="contact-link-title">LinkedIn</div><div class="contact-link-val">linkedin.com/in/mrkhondokar504</div></div>
             </a>
-            <a href="https://github.com/jisan23051365" target="_blank" class="contact-link">
+            <a href="https://github.com/jisan23051365" target="_blank" rel="noopener noreferrer" class="contact-link">
               <div class="contact-link-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg></div>
               <div><div class="contact-link-title">GitHub</div><div class="contact-link-val">github.com/jisan23051365</div></div>
-            </a>
-            <a href="https://www.sameeul.com.bd" target="_blank" class="contact-link">
-              <div class="contact-link-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
-              <div><div class="contact-link-title">Website</div><div class="contact-link-val">www.sameeul.com.bd</div></div>
             </a>
             <a href="tel:+8801767766680" class="contact-link">
               <div class="contact-link-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
               <div><div class="contact-link-title">Phone</div><div class="contact-link-val">+880 1767 766 680</div></div>
+            </a>
+            <a href="https://www.instagram.com/mrkhondokar040/" target="_blank" rel="noopener noreferrer" class="contact-link">
+              <div class="contact-link-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div>
+              <div><div class="contact-link-title">Instagram</div><div class="contact-link-val">@mrkhondokar040</div></div>
+            </a>
+            <a href="https://www.facebook.com/MrKhondokar040" target="_blank" rel="noopener noreferrer" class="contact-link">
+              <div class="contact-link-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></div>
+              <div><div class="contact-link-title">Facebook</div><div class="contact-link-val">MrKhondokar040</div></div>
+            </a>
+            <a href="https://x.com/Mr_Khondokar502" target="_blank" rel="noopener noreferrer" class="contact-link">
+              <div class="contact-link-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l16 16M4 20L20 4"/></svg></div>
+              <div><div class="contact-link-title">X / Twitter</div><div class="contact-link-val">@Mr_Khondokar502</div></div>
             </a>
           </div>
         </div>
@@ -1037,10 +1069,12 @@
   <div class="footer-logo">Sameeul Khondoker Jisan</div>
   <div class="footer-tagline">Data Scientist · IBM Certified AI Engineer · Generative AI Specialist</div>
   <div class="footer-socials">
-    <a href="https://linkedin.com/in/mrkhondokar504" target="_blank" class="social-btn" title="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 015 0V17M12 10v7"/></svg></a>
-    <a href="https://github.com/jisan23051365" target="_blank" class="social-btn" title="GitHub"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg></a>
+    <a href="https://linkedin.com/in/mrkhondokar504" target="_blank" rel="noopener noreferrer" class="social-btn" title="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 015 0V17M12 10v7"/></svg></a>
+    <a href="https://github.com/jisan23051365" target="_blank" rel="noopener noreferrer" class="social-btn" title="GitHub"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg></a>
     <a href="mailto:mrkhondokar.prof@gmail.com" class="social-btn" title="Email"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg></a>
-    <a href="https://www.sameeul.com.bd" target="_blank" class="social-btn" title="Website"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></a>
+    <a href="https://www.instagram.com/mrkhondokar040/" target="_blank" rel="noopener noreferrer" class="social-btn" title="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+    <a href="https://www.facebook.com/MrKhondokar040" target="_blank" rel="noopener noreferrer" class="social-btn" title="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+    <a href="https://x.com/Mr_Khondokar502" target="_blank" rel="noopener noreferrer" class="social-btn" title="X / Twitter"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l16 16M4 20L20 4"/></svg></a>
   </div>
   <div class="footer-copy">© <span id="yr"></span> Sameeul Khondoker Jisan · Dhaka, Bangladesh · Built with passion for AI & Data Science</div>
 </footer>
